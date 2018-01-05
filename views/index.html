@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Sito prova </title>
+  <script type='text/javascript' src='knockout-3.4.2.js'></script>
+  <script src='http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js'></script>
+</head>
+
+<body>
+  <header>
+  </header>
+  <ul data-bind="foreach: items">
+    <li>
+        <span data-bind="text: name" ></span>
+        <span data-bind="text: price" ></span>
+    </li>
+  </ul>
+  <script>
+    function Item(data){
+      this.name = ko.observable(data.name);
+      this.price = ko.observable(data.price);
+    }
+    var myViewModel = function() {
+      var self = this;
+      self.items = ko.observableArray([]);
+      $.getJSON("/api/store", function(allData) {
+        var mappedTasks = $.map(allData, function(item) { return new Item(item) });
+        self.items(mappedTasks);
+      });
+    }
+    ko.applyBindings(new myViewModel());
+
+  </script>
+</body>
+</html>
