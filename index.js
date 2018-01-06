@@ -40,10 +40,16 @@ app.use(express.static('public'))
 app.use(express.static('views'))
 
 
-app.get('/', (req, res) =>
-  //res.writeHead(200, {'Content-Type': 'text/plain'})
-  res.end(index.html)
-)
+app.get('/', (req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.send(index.html)
+});
+
+app.get('/admin', (req, res) => {
+  console.log('admin');
+  //res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.send(admin.html)
+});
 
 // get an instance of the express Router
 var router = express.Router();
