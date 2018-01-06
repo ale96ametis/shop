@@ -13,11 +13,11 @@
     <li>
         <input data-bind="value: name" />
         <input data-bind="value: price" />
+        <a href="#" data-bind="click: $parent.modifyItem">Modify</a>
         <a href="#" data-bind="click: $parent.removeItem">Delete</a>
     </li>
   </ul>
   <form data-bind="submit: addItem">
-    <!--<input data-bind="value: newItem._id, visible: false" />-->
     <input data-bind="value: itemName" placeholder="Article" />
     <input data-bind="value: itemPrice" placeholder="Price" />
     <button type="submit">Add</button>

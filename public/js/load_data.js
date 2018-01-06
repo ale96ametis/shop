@@ -21,6 +21,16 @@ function Item(data){
         success: function(result) { console.log('Removed') }
     });
   }
+  this.modify = function() {
+    var url = "/api/store/" + this.id();
+    $.ajax(url, {
+        data: ko.toJSON(
+          { name: this.name, price: this.price}
+        ),
+        type: "put", contentType: "application/json",
+        success: function(result) { console.log('Modified') }
+    });
+  }
 }
 var myViewModel = function() {
   var self = this;
@@ -49,7 +59,9 @@ var myViewModel = function() {
     self.save();
     self.itemName('');
     self.itemPrice('');
-
+  }
+  self.modifyItem = function(item) {
+    item.modify();
   }
 }
 ko.applyBindings(new myViewModel());

@@ -39,16 +39,20 @@ var port = process.env.PORT || 8080;
 app.use(express.static('public'))
 app.use(express.static('views'))
 
-
 app.get('/', (req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.send(index.html)
+  //res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.redirect('index.html')
+});
+
+app.get('/home', (req, res) => {
+  //res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.redirect('index.html')
 });
 
 app.get('/admin', (req, res) => {
   console.log('admin');
   //res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.send(admin.html)
+  res.redirect('admin.html')
 });
 
 // get an instance of the express Router
@@ -98,7 +102,21 @@ router.route('/store')
              res.json({ message: 'Successfully deleted' });
          });
       };
+    });
+router.route('/store/:item_id')
+  // modify element with item_id
+  .put(function(req, res) {
+    Item.findById(req.params.item_id, function(err, item) {
+      if (err) { res.send(err); }
+      item.name = req.body.name;
+      item.price = req.body.price;
+      item.save((err) => {
+        if (err) { res.send(err); }
+        res.json(item);
+      })
     })
+
+  })
 // middleware route to support CORS and preflighted requests
 app.use(function (req, res, next) {
     // do logging
@@ -108,9 +126,10 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Content-Type', 'application/json');
     if (req.method == 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE');
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
         return res.status(200).json({});
     }
+    
     // make sure we go to the next routes
     next();
 });
